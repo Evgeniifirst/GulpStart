@@ -6,6 +6,7 @@ const uglify = require("gulp-uglify-es").default;
 const browserSync = require("browser-sync").create();
 const autoprefixer = require("gulp-autoprefixer");
 const sourcemaps = require("gulp-sourcemaps");
+const size = require("gulp-size");
 const clean = require("gulp-clean");
 
 function scripts() {
@@ -17,6 +18,7 @@ function scripts() {
       .pipe(concat("main.min.js"))
       .pipe(uglify())
       .pipe(sourcemaps.write())
+      .pipe(size())
       .pipe(dest("app/js"))
       .pipe(browserSync.stream())
   );
@@ -29,6 +31,7 @@ function styles() {
     .pipe(concat("style.min.css"))
     .pipe(scss({ outputStyle: "compressed" }))
     .pipe(sourcemaps.init())
+    .pipe(size())
     .pipe(dest("app/css"))
     .pipe(browserSync.stream());
 }
@@ -62,6 +65,5 @@ exports.styles = styles;
 exports.scripts = scripts;
 exports.watching = watching;
 exports.browsersync = browsersync;
-
 exports.build = series(cleanDist, building);
 exports.default = parallel(styles, scripts, browsersync, watching);
